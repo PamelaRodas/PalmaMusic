@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Analisis Streaming</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f5f7fb;
+      color: #1f2937;
+    }
+    .wrap {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    h1, h2 {
+      margin-top: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .pill {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .muted {
+      color: #4b5563;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Analisis de Datos - Streaming Musical</h1>
+      <p class="muted">Trabajo en equipo: Laura (limpieza) y Sofia (analisis)</p>
+      {% if resultados %}
+      <div class="grid">
+        <div class="pill"><strong>Usuarios limpios:</strong> {{ resultados.usuarios_total }}</div>
+        <div class="pill"><strong>Canciones limpias:</strong> {{ resultados.canciones_total }}</div>
+        <div class="pill"><strong>Registros en merge:</strong> {{ resultados.merge_total }}</div>
+      </div>
+      {% else %}
+      <p>No se pudieron cargar los datos.</p>
+      {% endif %}
+    </section>
+
+    {% if resultados %}
+    <section class="card">
+      <h2>Pregunta 1</h2>
+      <p>Genero con mas canciones: <strong>{{ resultados.pregunta_1.genero }}</strong> ({{ resultados.pregunta_1.cantidad }})</p>
+    </section>
+
+    <section class="card">
+      <h2>Pregunta 2</h2>
+      <p>Genero con mayor promedio de reproducciones: <strong>{{ resultados.pregunta_2.genero }}</strong></p>
+      <p>Promedio: <strong>{{ resultados.pregunta_2.promedio }}</strong></p>
+    </section>
+
+    <section class="card">
+      <h2>Pregunta 3</h2>
+      <p>Canciones con calificacion mayor a 4.6: <strong>{{ resultados.pregunta_3.cantidad }}</strong></p>
+      <p>Porcentaje: <strong>{{ resultados.pregunta_3.porcentaje }}%</strong></p>
+    </section>
+    {% endif %}
+  </main>
+</body>
+</html>
