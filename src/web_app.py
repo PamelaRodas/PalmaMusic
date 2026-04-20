@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from flask import Flask, render_template
+from flask import Flask
 import pandas as pd
 
 try:
@@ -21,7 +21,7 @@ except ModuleNotFoundError:
     )
 
 
-app = Flask(__name__, template_folder="templates")
+app = Flask(__name__)
 BASE_DIR = Path(__file__).resolve().parents[1]
 
 
@@ -106,7 +106,30 @@ def construir_resultados():
 @app.route("/")
 def index():
     resultados = construir_resultados()
-    return render_template("index.html", resultados=resultados)
+    if not resultados:
+        return "No se pudieron cargar los datos."
+
+    lineas = [
+        f"Usuarios: {resultados['usuarios_total']}",
+        f"Canciones: {resultados['canciones_total']}",
+        f"Merge: {resultados['merge_total']}",
+        (
+            "Genero con mas canciones: "
+            f"{resultados['pregunta_1']['genero']} "
+            f"({resultados['pregunta_1']['cantidad']})"
+        ),
+        (
+            "Mayor promedio de reproducciones: "
+            f"{resultados['pregunta_2']['genero']} "
+            f"({resultados['pregunta_2']['promedio']})"
+        ),
+        (
+            "Calificacion > 4.6: "
+            f"{resultados['pregunta_3']['cantidad']} "
+            f"({resultados['pregunta_3']['porcentaje']}%)."
+        ),
+    ]
+    return "\n".join(lineas)
 
 
 if __name__ == "__main__":

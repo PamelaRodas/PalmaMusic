@@ -4,64 +4,41 @@ Integrantes:
 - Alma
 - Pamela
 
-## Objetivo
+## Archivos
 
-Limpiar y analizar datos con pandas usando dos archivos CSV relacionados.
+- `data/usuarios.csv`
+- `data/canciones.csv`
+- `src/data_processing.py`
+- `src/analisis.py`
+- `src/web_app.py`
+- `run_project.bat`
 
-## Ejecucion (PowerShell) - pasos probados
+## Comandos definitivos
 
-1. Verificar que estas en la carpeta del proyecto
-```powershell
-Get-Location
+### Opcion 1: ejecutar todo con un solo archivo
+
+En `cmd`, desde la carpeta del proyecto:
+
+```cmd
+run_project.bat
 ```
 
-2. Activar entorno virtual
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
+### Opcion 2: ejecutar paso por paso
 
-3. Instalar dependencias
-```powershell
+En `cmd`, desde la carpeta del proyecto:
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate.bat
 python -m pip install -r requirements.txt
-```
-
-4. Ejecutar analisis
-```powershell
 python src\analisis.py
-```
-
-5. Verificar web sin abrir navegador
-```powershell
-python -c "from src.web_app import app; c=app.test_client(); r=c.get('/'); print(r.status_code)"
-```
-
-Resultado esperado:
-- El analisis termina con "Analisis completado".
-- El comando web imprime 200.
-
-## Abrir la web
-
-```powershell
 python src\web_app.py
 ```
 
-Luego abrir: http://127.0.0.1:5000
+## Ver la pagina
 
-## Estructura esencial
+Con la terminal abierta, entrar en:
 
-- data/usuarios.csv
-- data/canciones.csv
-- src/data_processing.py
-- src/analisis.py
-- src/web_app.py
-- requirements.txt
-- .gitignore
-
-## Git para entrega (release)
-
-```bash
-git checkout develop
-git pull
-git checkout -b release/analisis-v1
-git push origin release/analisis-v1
+```text
+http://127.0.0.1:5000
 ```
