@@ -4,6 +4,11 @@ Integrantes:
 - Alma
 - Pamela
 
+## Conceptos clave
+
+- Un DataFrame es una tabla de datos en memoria (filas y columnas) que permite filtrar, limpiar, agrupar y combinar informacion con Pandas.
+- Un entorno virtual (venv) aisla las librerias del proyecto para que no se mezclen con otros trabajos y la ejecucion sea reproducible.
+
 ## Archivos
 
 - `data/usuarios.csv`
@@ -15,7 +20,7 @@ Integrantes:
 
 ## Comandos definitivos
 
-### Opcion 1: ejecutar todo con un solo archivo
+### Opcion 1: ejecutar analisis en terminal (Windows CMD/PowerShell)
 
 En `cmd`, desde la carpeta del proyecto:
 
@@ -32,13 +37,13 @@ python -m venv .venv
 .venv\Scripts\activate.bat
 python -m pip install -r requirements.txt
 python src\analisis.py
-python src\web_app.py
 ```
 
-## Ver la pagina
+## Opcional: ver la pagina web
 
-Con la terminal abierta, entrar en:
+Si tambien quieres levantar Flask:
 
 ```text
+python src\web_app.py
 http://127.0.0.1:5000
 ```

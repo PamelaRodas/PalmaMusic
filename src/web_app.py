@@ -1,54 +1,16 @@
-from pathlib import Path
-
 from flask import Flask
-import pandas as pd
 
 try:
-    from data_processing import (
-        cargar_datos,
-        manejar_valores_nulos,
-        estandarizar_texto,
-        eliminar_duplicados,
-        limpiar_genero,
-    )
+    from src import cargar_y_preparar_datos, construir_merge_usuarios_canciones
 except ModuleNotFoundError:
-    from src.data_processing import (
-        cargar_datos,
-        manejar_valores_nulos,
-        estandarizar_texto,
-        eliminar_duplicados,
-        limpiar_genero,
-    )
+    from __init__ import cargar_y_preparar_datos, construir_merge_usuarios_canciones
 
 
 app = Flask(__name__)
-BASE_DIR = Path(__file__).resolve().parents[1]
-
-
-def cargar_y_limpiar():
-    usuarios_path = BASE_DIR / "data" / "usuarios.csv"
-    canciones_path = BASE_DIR / "data" / "canciones.csv"
-
-    df_usuarios = cargar_datos(str(usuarios_path))
-    df_canciones = cargar_datos(str(canciones_path))
-
-    if df_usuarios is None or df_canciones is None:
-        return None, None
-
-    df_usuarios = manejar_valores_nulos(df_usuarios)
-    df_usuarios = estandarizar_texto(df_usuarios, columnas=["nombre", "email", "pais", "suscripcion"])
-    df_usuarios = eliminar_duplicados(df_usuarios)
-
-    df_canciones = manejar_valores_nulos(df_canciones)
-    df_canciones = estandarizar_texto(df_canciones, columnas=["titulo", "artista", "genero"])
-    df_canciones = limpiar_genero(df_canciones)
-    df_canciones = eliminar_duplicados(df_canciones)
-
-    return df_usuarios, df_canciones
 
 
 def construir_resultados():
-    df_usuarios, df_canciones = cargar_y_limpiar()
+    df_usuarios, df_canciones = cargar_y_preparar_datos()
     if df_usuarios is None or df_canciones is None:
         return None
 
@@ -68,21 +30,7 @@ def construir_resultados():
     canciones_bien_total = int(len(canciones_bien))
     canciones_bien_pct = round((canciones_bien_total / len(df_canciones)) * 100, 1)
 
-    usuarios_merge = df_usuarios.copy()
-    canciones_merge = df_canciones.copy()
-    usuarios_merge["id"] = pd.to_numeric(usuarios_merge["id"], errors="coerce")
-    canciones_merge["usuario_id"] = pd.to_numeric(canciones_merge["usuario_id"], errors="coerce")
-    usuarios_merge = usuarios_merge.dropna(subset=["id"])
-    canciones_merge = canciones_merge.dropna(subset=["usuario_id"])
-    usuarios_merge["id"] = usuarios_merge["id"].astype(int)
-    canciones_merge["usuario_id"] = canciones_merge["usuario_id"].astype(int)
-
-    merge = canciones_merge.merge(
-        usuarios_merge[["id", "nombre"]],
-        left_on="usuario_id",
-        right_on="id",
-        how="inner",
-    )
+    merge = construir_merge_usuarios_canciones(df_usuarios, df_canciones)
 
     return {
         "usuarios_total": int(len(df_usuarios)),
